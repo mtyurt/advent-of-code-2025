@@ -38,18 +38,42 @@ func main() {
 }
 
 func isIDInvalid(id string) bool {
+	// fmt.Println("checking id:", id)
 	len := len(id)
-	if len == 0 || len%2 != 0 {
+	if len == 0 {
 		return false
 	}
-
-	for i := range len / 2 {
-		if id[i] != id[i+len/2] {
+	for i := 0; i < len; i++ {
+		begin, end := 0, i
+		// fmt.Println("i:", i)
+		// fmt.Println("begin:", begin, "end:", end)
+		if end+1 >= len {
 			return false
 		}
-	}
+		patternMatch := true
+		for j := end + 1; j < len; {
+			// fmt.Println("j:", j)
+		innest:
+			for k := begin; k <= end; k++ {
+				// fmt.Println("k:", k)
+				if j+k >= len {
+					patternMatch = false
+					break innest
+				}
 
-	return true
+				// fmt.Println("id[k]:", id[k], "id[j+k]:", id[j+k])
+				if id[k] != id[j+k] {
+					patternMatch = false
+					break innest
+				}
+			}
+			j += (end - begin + 1)
+		}
+		if patternMatch {
+			return true
+		}
+	}
+	return false
 }
 
 func checkIDRange(begin, end int64) []int64 {
