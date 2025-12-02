@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"slices"
+	"testing"
+)
 
 func TestInvalidIDCheck(t *testing.T) {
 	ttest := []struct {
