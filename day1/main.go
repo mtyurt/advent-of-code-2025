@@ -16,11 +16,9 @@ func main() {
 
 	fmt.Println("hello world")
 
-	f, err := os.ReadFile("input.txt")
+	f, err := os.ReadFile("part2input.txt")
 	// f, err := os.ReadFile("test.txt")
 	check(err)
-
-	fmt.Println(string(f))
 
 	instructions := strings.Split(string(f), "\n")
 
@@ -43,13 +41,31 @@ func processInstructions(instructions []string) (int, error) {
 		if instruction[0] == 'L' {
 			distance = -distance
 		}
-		position += distance + 100
+		position += distance
+
+		if position < 0 {
+			zeroCount -= position / 100
+			if position-distance != 0 {
+				zeroCount += 1
+			}
+			position += 1000
+			if position%100 == 0 {
+				zeroCount -= 1
+			}
+		} else {
+			zeroCount += position / 100
+			if position >= 100 && position%100 == 0 {
+				zeroCount -= 1
+			}
+		}
+
 		position = position % 100
 
 		if position == 0 {
 			zeroCount = zeroCount + 1
 		}
-		fmt.Println("Instruction:", instruction, " New Position:", position, " Distance:", distance)
+		fmt.Println("Instruction:", instruction, " New Position:", position, " Distance:", distance, "zeroCount", zeroCount)
+
 	}
 
 	return zeroCount, nil
