@@ -22,3 +22,13 @@ func isIDInvalid(id string) bool {
 
 	return true
 }
+
+func checkIDRange(begin, end int64) []int64 {
+	ids := []int64{}
+	for id := begin; id <= end; id++ {
+		if isIDInvalid(fmt.Sprintf("%d", id)) {
+			ids = append(ids, id)
+		}
+	}
+	return ids
+}
