@@ -24,7 +24,7 @@ func main() {
 		if line == "" {
 			continue
 		}
-		total += maxJoltage(line)
+		total += maxNDigitJoltage(line, 12)
 	}
 	fmt.Println("total:", total)
 }
@@ -53,4 +53,39 @@ func maxJoltage(in string) int {
 
 	return firstLargest*10 + secondLargest
 
+}
+
+func getDigit(in string, i int) int {
+
+	digit, err := strconv.Atoi(string(in[i]))
+	check(err)
+	return digit
+
+}
+
+func maxNDigitJoltage(in string, lookingFor int) int {
+	totalDigits := len(in)
+	// fmt.Println("checking", in, "totalDigits", totalDigits)
+
+	digits := make([]int, lookingFor)
+	beginIndex := 0
+	total := 0
+	for i := range lookingFor {
+		firstLargestInWindow := 0
+		largestIndexInWindow := 0
+		// fmt.Printf("searching from: %d until: %d for %dth index\n", beginIndex, totalDigits-12+i, i)
+		for j := beginIndex; j <= totalDigits-lookingFor+i; j++ {
+			digit := getDigit(in, j)
+			if digit > firstLargestInWindow {
+				firstLargestInWindow = digit
+				largestIndexInWindow = j
+			}
+		}
+		// fmt.Printf("digit %d: %d, found at: %d\n", i, firstLargestInWindow, largestIndexInWindow)
+		digits[i] = firstLargestInWindow
+		beginIndex = largestIndexInWindow + 1
+		total = total*10 + digits[i]
+	}
+
+	return total
 }
