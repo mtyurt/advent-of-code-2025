@@ -4,8 +4,7 @@ import "testing"
 
 func TestProcessInput(t *testing.T) {
 
-	input := `
-..@@.@@@@.
+	input := `..@@.@@@@.
 @@@.@.@.@@
 @@@@@.@.@@
 @.@@@@..@.
