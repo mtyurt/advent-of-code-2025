@@ -2,11 +2,17 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
 func main() {
 	fmt.Println("vim-go")
+
+	f, _ := os.ReadFile("input.txt")
+
+	body := strings.TrimSpace(string(f))
+	fmt.Println(processInput(body))
 }
 
 func processInput(input string) int {
@@ -28,7 +34,7 @@ func processInput(input string) int {
 			}
 			occupiedNeighbors := 0
 
-			fmt.Printf("i: %d j: %d | ", i, j)
+			// fmt.Printf("i: %d j: %d | ", i, j)
 			if i > 0 && matrix[i-1][j] == '@' {
 				occupiedNeighbors++
 			}
