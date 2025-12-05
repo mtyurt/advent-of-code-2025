@@ -16,7 +16,7 @@ func TestProcessInput(t *testing.T) {
 @.@.@@@.@.`
 
 	expected := 13
-	if got := processInput(input); got != expected {
+	if got := processInput(input, 1); got != expected {
 		t.Errorf("Expected %d, got %d", expected, got)
 	}
 }

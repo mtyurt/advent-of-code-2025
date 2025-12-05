@@ -12,10 +12,10 @@ func main() {
 	f, _ := os.ReadFile("input.txt")
 
 	body := strings.TrimSpace(string(f))
-	fmt.Println(processInput(body))
+	fmt.Println(processInput(body, 1000))
 }
 
-func processInput(input string) int {
+func processInput(input string, maxTries int) int {
 
 	matrix := make([][]rune, 0)
 	for _, line := range strings.Split(input, "\n") {
@@ -25,6 +25,15 @@ func processInput(input string) int {
 		}
 		matrix = append(matrix, row)
 	}
+	exit := false
+	total := 0
+	for i := 0; !exit && i < maxTries; i++ {
+		found := processInputMatrix(matrix, true)
+		total += found
+	}
+	return total
+}
+func processInputMatrix(matrix [][]rune, remove bool) int {
 	total := 0
 	for i := range len(matrix) {
 		for j := 0; j < len(matrix[i]); j++ {
@@ -63,10 +72,14 @@ func processInput(input string) int {
 
 			if occupiedNeighbors < 4 {
 				total++
+
+				if remove {
+					matrix[i][j] = '.'
+				}
 			}
 
 		}
-		fmt.Printf("Line: %d total: %d\n", i, total)
+		// fmt.Printf("Line: %d total: %d\n", i, total)
 	}
 	return total
 }
