@@ -8,8 +8,9 @@ import (
 )
 
 type RangePair struct {
-	begin int64
-	end   int64
+	begin  int64
+	end    int64
+	remove bool
 }
 
 func check(e error) {
@@ -39,7 +40,7 @@ func main() {
 		end, err := strconv.ParseInt(splitted[1], 10, 64)
 		check(err)
 
-		ranges = append(ranges, RangePair{begin, end})
+		ranges = append(ranges, RangePair{begin, end, false})
 	}
 
 	ingredients := make([]int64, 0)
@@ -49,7 +50,11 @@ func main() {
 		ingredients = append(ingredients, id)
 	}
 
+	fmt.Println("Part 1: Spolied Ingredients")
 	total := checkPartOneFreshness(ranges, ingredients)
+	fmt.Println(total)
+	fmt.Println("Part 2: Unique ID count")
+	total = int(checkAllIDsCount(ranges))
 	fmt.Println(total)
 
 }
@@ -63,6 +68,37 @@ func checkPartOneFreshness(ranges []RangePair, ingredients []int64) int {
 				total++
 				break rangecheck
 			}
+		}
+	}
+	return total
+}
+
+func checkAllIDsCount(ranges []RangePair) int64 {
+	total := int64(0)
+	newRanges := []RangePair{}
+	for _, r := range ranges {
+		for j, r2 := range newRanges {
+			if r2.remove {
+				continue
+			}
+
+			if r.end >= r2.begin && r.begin <= r2.end {
+				if r2.begin < r.begin {
+					r.begin = r2.begin
+				}
+				if r2.end > r.end {
+					r.end = r2.end
+				}
+				newRanges[j].remove = true
+			}
+		}
+		newRanges = append(newRanges, r)
+
+	}
+
+	for _, r := range newRanges {
+		if !r.remove {
+			total += r.end - r.begin + 1
 		}
 	}
 	return total
